@@ -11,11 +11,11 @@ class FeatureExtractionExecBlock(AbstractExecBlock):
         # res = {'id': item.index}
         res = {}
         comment_features = self._pipeline.run(str(item['comment']))
-        comment_features = {"comment_" + subkey: comment_features[key][subkey] for key in comment_features
+        comment_features = {"COMMENT_" + subkey: comment_features[key][subkey] for key in comment_features
                             for subkey in comment_features[key]}
 
         parent_features = self._pipeline.run(str(item['parent']))
-        parent_features = {"parent_" + subkey: parent_features[key][subkey] for key in parent_features
+        parent_features = {"PARENT_" + subkey: parent_features[key][subkey] for key in parent_features
                            for subkey in parent_features[key]}
 
         res.update(comment_features)

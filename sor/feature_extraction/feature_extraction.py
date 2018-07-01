@@ -1,4 +1,5 @@
 from abc import abstractmethod, ABC
+from typing import Dict
 
 
 class AbstractFeatureExtractor(ABC):
@@ -18,3 +19,7 @@ class AbstractFeatureExtractor(ABC):
         :return: The features
         """
         pass
+
+    @staticmethod
+    def _append_key(d: Dict, string):
+        return {string + "_" + key: d[key] for key in d}

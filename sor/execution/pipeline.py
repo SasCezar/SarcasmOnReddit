@@ -91,10 +91,7 @@ class AbstractPipeline(ABC):
 
 class SimplePipeline(AbstractPipeline):
     def run(self, item):
-        i = 0
         for name, callable_object in self._callables:
-            item['id'] = i
-            i += 1
             item = callable_object.run(item)
         return item
 

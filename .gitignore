@@ -164,3 +164,4 @@ fabric.properties
 pip-selfcheck.json
 
 /data/
+/output/
