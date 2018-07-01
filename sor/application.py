@@ -19,7 +19,7 @@ DATASET = "../data/{}-balanced.tsv".format(SET)
 EXTRACT_FEATURES = True
 CLASSIFY = False
 FOLDS = 10
-
+FILENAME = "../output/features_{}.csv".format(SET)
 
 def main():
     logger = logging.getLogger()
@@ -42,14 +42,13 @@ def main():
         features = SimpleExecution().execute(execblock, dataset)
 
         outdf = pandas.DataFrame(features)
-        outdf.to_csv("../output/prova_features_{}_normalized.csv".format(SET))
+        outdf.to_csv(FILENAME)
 
     if CLASSIFY:
-        x = pandas.read_csv("../output/features_{}_normalized.csv".format(SET))
-        x = x[x.columns.drop(list(x.filter(regex='PARENT')))]
+        x = pandas.read_csv(FILENAME)
         x = x[x.columns.drop(list(x.filter(regex='PARENT')))]
         x.fillna(0, inplace=True)
-        enlonged = x.filter(regex='_pos_').as_matrix()
+        enlonged = x.filter(regex='_POS_').as_matrix()
         x = x.loc[:, (x != 0).any(axis=0)]
         x.corr()
         y = pandas.DataFrame({'label': df['label']})
