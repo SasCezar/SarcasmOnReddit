@@ -21,6 +21,7 @@ CLASSIFY = False
 FOLDS = 10
 FILENAME = "../output/features_{}.csv".format(SET)
 
+
 def main():
     logger = logging.getLogger()
     logger.setLevel(logging.INFO)
@@ -37,7 +38,7 @@ def main():
     if EXTRACT_FEATURES:
         feature_extraction_pipeline = SplitPipeline(config.FEATURE_EXTRACTION_ALGORITHMS)
 
-        dataset = df.to_dict('records')[:100]
+        dataset = df.to_dict('records')
         execblock = FeatureExtractionExecBlock(feature_extraction_pipeline)
         features = SimpleExecution().execute(execblock, dataset)
 
