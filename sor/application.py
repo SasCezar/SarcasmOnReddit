@@ -13,11 +13,14 @@ from execution.execution import SimpleExecution
 from execution.my_executions import FeatureExtractionExecBlock
 from execution.pipeline import SplitPipeline
 from sorio.reddit import load_dataset
+from visualization.plots import pos_bar_plot, subreddit_frequency, sarcasm_count, POS_TAGS, STATS_TAGS, stats_bar_plot, \
+    SENTIMENT_TAGS, sentiment_bar_plot
 
 SET = "train"
 DATASET = "../data/{}-balanced.tsv".format(SET)
-EXTRACT_FEATURES = True
+EXTRACT_FEATURES = False
 CLASSIFY = False
+VISUALIZE = True
 FOLDS = 10
 FILENAME = "../output/features_{}.csv".format(SET)
 
@@ -44,6 +47,23 @@ def main():
 
         outdf = pandas.DataFrame(features)
         outdf.to_csv(FILENAME)
+
+    if VISUALIZE:
+        x = pandas.read_csv("../output/features_{}.csv".format(SET))
+        labels = [str(x) for x in list(df['label'])]
+        subreddits = [str(x) for x in list(df['subreddit'])]
+        print(len(subreddits))
+        print(len(set(subreddits)))
+        comments = [x for x in list(df['comment'])]
+        x['label'] = pandas.Series(labels, index=x.index)
+        x['subreddit'] = pandas.Series(subreddits, index=x.index)
+        x['comment'] = pandas.Series(comments, index=x.index)
+        x = x[x.columns.drop(list(x.filter(regex='PARENT')))]
+        pos_bar_plot(x, POS_TAGS, "pos")
+        stats_bar_plot(x, STATS_TAGS, "stats")
+        subreddit_frequency(x)
+        sarcasm_count(x)
+        sentiment_bar_plot(x, SENTIMENT_TAGS, "sentiment")
 
     if CLASSIFY:
         x = pandas.read_csv(FILENAME)

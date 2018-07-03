@@ -104,7 +104,7 @@ class VaderSentimentExtraction(AbstractFeatureExtractor):
 class FormattingStatsExtraction(AbstractFeatureExtractor):
     def __init__(self, normalize=False):
         super().__init__()
-        self._enlonged_re = re.compile(r"(.)\1{2}")
+        self._enlonged_re = re.compile(r"(.)\1{2,}")
         self._norm = normalize
 
     def run(self, text):
@@ -127,7 +127,8 @@ class FormattingStatsExtraction(AbstractFeatureExtractor):
         return count
 
     def _enlonged_count(self, text):
-        count = len([word for word in nltk.word_tokenize(text) if self._enlonged_re.search(word)])
+        tokens = nltk.word_tokenize(text)
+        count = len([word for word in tokens if self._enlonged_re.search(word)])
         if self._norm:
-            count = count / len(text)
+            count = count / len(tokens)
         return count
