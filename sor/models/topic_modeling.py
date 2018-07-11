@@ -9,6 +9,7 @@ from gensim.models import CoherenceModel, LdaMulticore
 import config
 from execution.pipeline import SimplePipeline
 from sorio.reddit import load_dataset
+from visualization.plots import topics_word_bar, sarcasm_topic_frequency
 
 algorithms = {"lemmed": {
     "class": "textprocessing.normalization.Lemmer",
@@ -70,13 +71,13 @@ def find_num_topics(documents: List, SET):
                 outf.flush()
 
 
-def label_documents(documents: List, SET):
+def label_documents(documents: List, LVL, SET):
     OPTIMAL_TOPICS = 10
     PREPROCESSINGs = ["lemmed"]
     for PREPROCESSING in PREPROCESSINGs:
-        # texts = clean_documents([str(doc) for doc in documents])
-        # pickle.dump(texts, open("{}_{}_text".format(SET, PREPROCESSING), "wb"))
-        texts = pickle.load(open("{}_{}_text".format(SET, PREPROCESSING), "rb"))
+        # texts = clean_documents([str(doc) for doc in documents], PREPROCESSING)
+        # pickle.dump(texts, open("{}_{}_{}_text".format(SET, LVL, PREPROCESSING), "wb"))
+        texts = pickle.load(open("{}_{}_{}_text".format(SET, LVL, PREPROCESSING), "rb"))
         dictionary = Dictionary(texts)
         print('Number of unique tokens: %d' % len(dictionary))
         dictionary.filter_extremes(no_below=20, no_above=0.5)
@@ -88,9 +89,9 @@ def label_documents(documents: List, SET):
         logger.info("Corpus complete")
         # model = LdaMulticore(corpus=corpus, id2word=dictionary, iterations=1000, num_topics=OPTIMAL_TOPICS, workers=3)
 
-        # model.save("{}_{}_model_cv_coherence_{}".format(SET, OPTIMAL_TOPICS, PREPROCESSING))
+        # model.save("{}_{}_{}_model_cv_coherence_{}".format(LVL, OPTIMAL_TOPICS, PREPROCESSING))
 
-        model = LdaMulticore.load("{}_{}_1000_model_cv_coherence_{}".format(SET, OPTIMAL_TOPICS, PREPROCESSING))
+        model = LdaMulticore.load("{}_{}_1000_model_cv_coherence_{}".format(LVL, OPTIMAL_TOPICS, PREPROCESSING))
         coherence_model = CoherenceModel(model=model, texts=texts, dictionary=dictionary, coherence='c_v')
         print("Coherence {}".format(coherence_model.get_coherence()))
         topics = []
@@ -99,7 +100,8 @@ def label_documents(documents: List, SET):
             topic = model.get_document_topics(document)
             topics.append(topic)
 
-        with open("topics_results_{}_{}.csv".format(SET, PREPROCESSING), "wt", encoding="utf8", newline="") as outf:
+        with open("topics_results_{}_{}_{}.csv".format(SET, LVL, PREPROCESSING), "wt", encoding="utf8",
+                  newline="") as outf:
             writer = csv.writer(outf)
             for document_topics in topics:
                 sorted_topics = sorted(document_topics, key=lambda x: -x[1])
@@ -110,17 +112,21 @@ def label_documents(documents: List, SET):
                     print("NONE ERROR")
                 writer.writerow(best)
 
-        x = model.show_topics(num_topics=OPTIMAL_TOPICS, num_words=25, formatted=True)
+        x = model.show_topics(num_topics=OPTIMAL_TOPICS, num_words=10, formatted=True)
         # Below Code Prints Topics and Words
-        with open("topics_keywords_{}_{}".format(SET, PREPROCESSING), "wt", encoding="utf8", newline="") as outf:
+        with open("topics_keywords_{}_{}_{}".format(SET, LVL, PREPROCESSING), "wt", encoding="utf8",
+                  newline="") as outf:
             writer = csv.writer(outf)
             for t in x:
                 topic = t[0]
                 words = [(word_score.split("*")[1].strip()[1:-1], float(word_score.split("*")[0].strip())) for
                          word_score in
                          t[1].split("+")]
-                sort_words = sorted(words, key=lambda z: -z[1])
+                sort_words = sorted(words, key=lambda z: z[1])
                 print(str(topic) + " " + str(sort_words))
+                words = [w for w, s in sort_words]
+                score = [s for w, s in sort_words]
+                topics_word_bar(words, score, t[0])
                 writer.writerow([topic] + [sort_words])
 
     return
@@ -140,25 +146,48 @@ TOPIC_MAP = {"0": "Movies",
 if __name__ == '__main__':
     logger = logging.getLogger()
     logger.setLevel(logging.INFO)
-    DATASET = "../../data/{}-balanced.tsv".format("train")
+    SET = "train"
+    DATASET = "../../data/{}-balanced.tsv".format(SET)
 
     df = load_dataset(DATASET)
-    SET = "parent"
-    comments = list(df[SET])
+    LVL = "parent"
+    comments = list(df[LVL])
     subreddits = list(df["subreddit"])
     labels = list(df["label"])
 
-    label_documents(comments, SET)
+    label_documents(comments, LVL, SET)
 
-    with open("topics_results_parent_lemmed.csv", "rt", encoding="utf8") as inf:
+    with open("topics_results_{}_{}_{}.csv".format(SET, LVL, "lemmed"), "rt", encoding="utf8") as inf:
         topics = [line.strip() for line in inf]
 
     print(len(topics))
     print(len(subreddits))
     print(len(labels))
 
-    with open("topics_subreddit.csv", "wt", encoding="utf8", newline="") as outf:
+    with open("{}_{}_{}_topics_subreddit.csv".format(SET, LVL, "lemmed"), "wt", encoding="utf8", newline="") as outf:
         writer = csv.writer(outf)
-        writer.writerow(["topics", "subreddit", "label"])
+        writer.writerow(["topic", "topic_name", "subreddit", "label"])
         for topic, subreddit, label in zip(topics, subreddits, labels):
-            writer.writerow([topic, subreddit, label])
+            writer.writerow([topic, TOPIC_MAP[topic], subreddit, label])
+
+    with open("{}_{}_{}_topics_subreddit_top_10.csv".format(SET, LVL, "lemmed"), "wt", encoding="utf8",
+              newline="") as outf:
+        writer = csv.writer(outf)
+        writer.writerow(["topic", "topic_name", "subreddit", "label"])
+        for topic, subreddit, label in zip(topics, subreddits, labels):
+            if subreddit.lower() in ["askreddit", "politics", "worldnews", "leagueoflegends", "pcmasterrace", "funny",
+                                     "news", "pics", "todayilearned", "nfl"]:
+                writer.writerow([topic, TOPIC_MAP[topic], subreddit, label])
+
+    # topics_bar(topics)
+    sarcasm_topic_frequency(topics, labels)
+
+    # cleaning_pipeline = SimplePipeline(config.PREPROCESSING_ALGORITHMS)
+    # comments = [str(cleaning_pipeline.run(x)).lower() for x in list(df['comment'])]
+    # comments = [str(x).lower() for x in list(df['comment'])]
+    #
+    # df = pandas.DataFrame({"comments": comments, "topic": topics})
+    # for i in range(0, 10):
+    #     d = df.loc[df['topic'] == str(i)]
+    #     text = " ".join(list(d['comments']))
+    #     create_wordcloud(text, "topic_{}_wc.png".format(i))

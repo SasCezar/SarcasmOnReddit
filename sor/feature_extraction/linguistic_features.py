@@ -117,7 +117,8 @@ class FormattingStatsExtraction(AbstractFeatureExtractor):
 
     @staticmethod
     def _wordcount(text):
-        return len(nltk.word_tokenize(text))
+        res = len(nltk.word_tokenize(text))
+        return res
 
     def _capital_case_count(self, text):
         count = sum(1 for c in text if c.isupper())

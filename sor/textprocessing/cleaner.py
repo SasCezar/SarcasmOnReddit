@@ -9,7 +9,7 @@ class AbstractCleaner(AbstractTextProcessor):
         self.sub = " "
 
     def run(self, text):
-        cleaned_text = self.re_match.sub(self.sub, text)
+        cleaned_text = self.re_match.sub(self.sub, str(text))
         return cleaned_text
 
     def configuration(self):
