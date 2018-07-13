@@ -14,8 +14,8 @@ from visualization.plots import pos_bar_plot, subreddit_frequency, POS_TAGS, STA
 SET = "train"
 DATASET = "../data/{}-balanced.tsv".format(SET)
 EXTRACT_FEATURES = False
-WC = True
-VISUALIZE = False
+WC = False
+VISUALIZE = True
 FOLDS = 10
 FILENAME = "../output/features_{}.csv".format(SET)
 TESTFILR = "../output/features_{}.csv".format("TEST")

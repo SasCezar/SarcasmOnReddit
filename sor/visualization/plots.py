@@ -10,7 +10,7 @@ from PIL import Image
 from pandas import DataFrame
 from wordcloud import WordCloud
 
-IMAGES = True
+IMAGES = False
 
 SARCASM_COLOR = 'rgba(0,200,0,1)'
 NO_SARCASM_COLOR = 'rgba(192,192,192,1)'
@@ -54,6 +54,7 @@ def pos_bar_plot(df: DataFrame, X, name):
 
     data = [no_sarcasm, sarcasm]
     layout = go.Layout(
+        title="Part-of-Speech distribution",
         barmode='group',
     )
 
@@ -87,6 +88,7 @@ def stats_bar_plot(df: DataFrame, X, name):
 
     data = [no_sarcasm, sarcasm]
     layout = go.Layout(
+        title="Formatting stats",
         barmode='group',
     )
 
@@ -139,6 +141,7 @@ def sentiment_correlation(df: DataFrame):
 
     data = [sarcasm_p, no_sarcasm_p]
     layout = go.Layout(
+        title="Instability",
         barmode='group',
     )
 
@@ -189,7 +192,8 @@ def sentiment_bar_plot(df: DataFrame, X, name):
 
     data = [no_sarcasm_p, sarcasm_p]
     layout = go.Layout(
-        barmode='group',
+        title="Sentiment count",
+        barmode='group'
     )
 
     fig = go.Figure(data=data, layout=layout)
@@ -236,7 +240,8 @@ def sentiment_bar_plot(df: DataFrame, X, name):
 
     data = [no_sarcasm_p, sarcasm_p]
     layout = go.Layout(
-        barmode='group',
+        title="Sentiment intensity",
+        barmode='group'
     )
 
     fig = go.Figure(data=data, layout=layout)
@@ -266,7 +271,8 @@ def sentiment_bar_plot(df: DataFrame, X, name):
 
     data = [no_sarcasm_p, sarcasm_p]
     layout = go.Layout(
-        barmode='group',
+        title="Avarage Sentiment",
+        barmode='group'
     )
 
     fig = go.Figure(data=data, layout=layout)
@@ -314,8 +320,8 @@ def subreddit_frequency(df: DataFrame):
 
     data = [subreddits_posts]
     layout = go.Layout(
-        title='Distribution of sarcasm on subreddits',
-        barmode='group',
+        title='Number of comments for subreddit',
+        barmode='group'
         # barmode='stack',
     )
 
@@ -341,7 +347,7 @@ def subreddit_frequency(df: DataFrame):
     data = [no_sarcasm, sarcasm]
     layout = go.Layout(
         title='Distribution of sarcasm on subreddits',
-        barmode='group',
+        barmode='group'
         # barmode='stack',
     )
 
@@ -451,7 +457,10 @@ def line_plot():
     )
 
     data = [trace]
-    fig = dict(data=data)
+    layout = go.Layout(
+        title='LDA Cv coherence using \'comment\' for different num of topics',
+    )
+    fig = dict(data=data, layout=layout)
 
     plotly.offline.plot(fig, filename="comment_topics_scatter.html")
     plotly.plotly.image.save_as(fig, 'comment_topics_scatter.png', height=650, width=1800) if IMAGES else None
@@ -468,7 +477,10 @@ def line_plot():
     )
 
     data = [trace]
-    fig = dict(data=data)
+    layout = go.Layout(
+        title='LDA Cv coherence using \'parent\' for different num of topics',
+    )
+    fig = dict(data=data, layout=layout)
 
     plotly.offline.plot(fig, filename="parent_topics_scatter.html")
     plotly.plotly.image.save_as(fig, 'parent_topics_scatter.png', height=650, width=1800) if IMAGES else None
@@ -510,7 +522,10 @@ def multi_line_plot():
         name="Max"
     )
     data = [trace0, trace1, trace2]
-    fig = dict(data=data)
+    layout = go.Layout(
+        title='LDA Cv coherence using \'parent\' for different num of topics',
+    )
+    fig = dict(data=data, layout=layout)
 
     plotly.offline.plot(fig, filename="parent_multi_topics_scatter.html")
     plotly.plotly.image.save_as(fig, 'parent_multi_topics_scatter.png', height=650, width=1800) if IMAGES else None
@@ -617,12 +632,12 @@ def topics_word_bar(words, score, name):
         x=score,
         y=words,
         orientation='h',
-        name="Topic {} words".format(name)
+        name="Topic '{}' words".format(TOPIC_MAP[str(name)])
     )]
 
     layout = go.Layout(
         barmode='stack',
-        title='Topic {} words'.format(name)
+        title='Topic \'{}\' words'.format(TOPIC_MAP[str(name)])
     )
     fig = go.Figure(data=data, layout=layout)
     plotly.offline.plot(fig, filename="topic_{}_word_bar.html".format(name))
@@ -668,7 +683,7 @@ def sarcasm_topic_frequency(topics, labels):
     data = [no_sarcasm, sarcasm]
     layout = go.Layout(
         title='Distribution of sarcasm on topics',
-        barmode='group',
+        barmode='group'
         # barmode='stack',
     )
 
