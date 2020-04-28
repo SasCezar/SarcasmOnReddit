@@ -17,19 +17,19 @@ Distribution of sarcasm for POS tags:
 
 ### Sentiment
 Sentiment Distribution:
-![Sentiment](sentment_donut.png "Sentiment Donut")
+![Sentiment](images/sentment_donut.png "Sentiment Donut")
 
 Distribution of Sarcasm across different sentiment:
-![Sentiment Sarcasm DIstribution](/sentiment-bar.png "Sentiment Sarcasm Distribution")
+![Sentiment Sarcasm DIstribution](images/sentiment-bar.png "Sentiment Sarcasm Distribution")
 
 
 ### Topic Modeling
 
 To find the number of topic, use use perplexity:
-![Perplexity](/image/parent_multi_topics_scatter.png "Perplexity")
+![Perplexity](images/parent_multi_topics_scatter.png "Perplexity")
 
 The distibution of sarcasm across topics:
-![Topics Sarcasm](topic-sacrasm-bar.png "Sarcasm distribution for topics")
+![Topics Sarcasm](images/topic-sacrasm-bar.png "Sarcasm distribution for topics")
 
 
 Check the in deep [report.pdf](report.pdf) for the full view.
