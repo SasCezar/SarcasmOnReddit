@@ -17,7 +17,8 @@ Distribution of sarcasm for POS tags:
 
 ### Sentiment
 Sentiment Distribution:
-<img src="images/sentiment_donut.png" height="200" />
+
+<img src="images/sentiment_donut.png" height="400" />
 
 
 Distribution of Sarcasm across different sentiment:
