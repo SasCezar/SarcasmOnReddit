@@ -29,7 +29,7 @@ To find the number of topic, use use perplexity:
 ![Perplexity](images/parent_multi_topics_scatter.png "Perplexity")
 
 The distibution of sarcasm across topics:
-![Topics Sarcasm](images/topic-sacrasm-bar.png "Sarcasm distribution for topics")
+![Topics Sarcasm](images/topic-sarcasm-bar.png "Sarcasm distribution for topics")
 
 
 Check the in deep [report.pdf](report.pdf) for the full view.
