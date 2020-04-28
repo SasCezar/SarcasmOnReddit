@@ -13,11 +13,12 @@ Sarcasm is a form of communication act in which the speakers implicitly communic
 
 ### POS
 Distribution of sarcasm for POS tags:
-![POS Scarcasm Distribution](images/pos-bar.png =100x "POS Sarcasm Distribution")
+![POS Scarcasm Distribution](images/pos-bar.png "POS Sarcasm Distribution")
 
 ### Sentiment
 Sentiment Distribution:
-![Sentiment](images/sentiment_donut.png "Sentiment Donut")
+<img src="images/sentiment_donut.png" height="200" />
+
 
 Distribution of Sarcasm across different sentiment:
 ![Sentiment Sarcasm DIstribution](images/sentiment-bar.png "Sentiment Sarcasm Distribution")
