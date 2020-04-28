@@ -20,7 +20,6 @@ Sentiment Distribution:
 
 <img src="images/sentiment_donut.png" height="400" />
 
-
 Distribution of Sarcasm across different sentiment:
 ![Sentiment Sarcasm DIstribution](images/sentiment-bar.png "Sentiment Sarcasm Distribution")
 
