@@ -7,3 +7,6 @@ Sarcasm is a form of communication act in which the speakers implicitly communic
 * Are any linguistic feature that can help detecting sarcasm?
 * Is there a relation between sentiment and sarcasm?
 * Which are the topics that people tend to react more sarcastically?
+
+
+Check the in deep [report.pdf](report.pdf)
