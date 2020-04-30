@@ -36,4 +36,4 @@ The distibution of sarcasm across topics:
 ![Topics Sarcasm](images/topics-sarcasm-bar.png "Sarcasm distribution for topics")
 
 
-Check the in deep [report.pdf](report.pdf) for the full view.
+Check the [report.pdf](report.pdf) for the full view.
